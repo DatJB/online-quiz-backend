@@ -1,7 +1,3 @@
-CREATE DATABASE online_quiz_db;
-
-USE online_quiz_db;
-
 -- USERS
 CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,

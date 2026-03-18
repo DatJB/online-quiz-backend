@@ -1,5 +1,3 @@
-USE online_quiz_db;
-
 -- USERS
 INSERT INTO users (id, username, email, password, role) VALUES
 (1, 'admin1', 'admin1@gmail.com', '123456', 'admin'),
