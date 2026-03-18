@@ -1,12 +1,7 @@
 package com.group.backend.entity;
 
 import com.group.backend.constant.entity.QuestionEntityConstant;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,8 +22,9 @@ public class QuestionEntity {
   @Column(name = QuestionEntityConstant.COL_ID)
   private Integer id;
 
-  @Column(name = QuestionEntityConstant.COL_EXAM_ID, nullable = false)
-  private Integer examId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = QuestionEntityConstant.COL_EXAM_ID, nullable = false)
+  private ExamEntity exam;
 
   @Column(name = QuestionEntityConstant.COL_CONTENT, columnDefinition = "TEXT", nullable = false)
   private String content;

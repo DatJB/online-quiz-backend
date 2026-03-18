@@ -2,14 +2,8 @@ package com.group.backend.entity;
 
 import com.group.backend.constant.entity.ExamEntityConstant;
 import com.group.backend.entity.enums.ExamType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,6 +44,7 @@ public class ExamEntity extends BaseJpaAuditingEntity {
   @Column(name = ExamEntityConstant.COL_DURATION, nullable = false)
   private Integer duration;
 
-  @Column(name = ExamEntityConstant.COL_CREATED_BY)
-  private Integer createdBy;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = ExamEntityConstant.COL_CREATED_BY)
+  private UserEntity createdBy;
 }

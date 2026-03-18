@@ -12,7 +12,7 @@ CREATE TABLE users (
 CREATE TABLE students (
     user_id INT PRIMARY KEY,
     student_code VARCHAR(20) UNIQUE NOT NULL,
-    class VARCHAR(25),
+    class_name VARCHAR(25),
     phone VARCHAR(15),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

@@ -2,19 +2,10 @@ package com.group.backend.entity;
 
 import com.group.backend.constant.entity.UserEntityConstant;
 import com.group.backend.entity.enums.Role;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = UserEntityConstant.TABLE_NAME)
@@ -23,7 +14,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserEntity extends BaseJpaAuditingEntity {
+public class UserEntity extends BaseJpaAuditingEntity
+{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,4 +34,13 @@ public class UserEntity extends BaseJpaAuditingEntity {
   @Enumerated(EnumType.STRING)
   @Column(name = UserEntityConstant.COL_ROLE, nullable = false)
   private Role role;
+
+  @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+  private StudentEntity student;
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  private List<AttemptEntity> attempts;
+
+  @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
+  private List<ExamEntity> createdExams;
 }

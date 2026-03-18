@@ -1,12 +1,7 @@
 package com.group.backend.entity;
 
 import com.group.backend.constant.entity.AnswerEntityConstant;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,14 +22,17 @@ public class AnswerEntity {
   @Column(name = AnswerEntityConstant.COL_ID)
   private Integer id;
 
-  @Column(name = AnswerEntityConstant.COL_ATTEMPT_ID, nullable = false)
-  private Integer attemptId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = AnswerEntityConstant.COL_ATTEMPT_ID, nullable = false)
+  private AttemptEntity attempt;
 
-  @Column(name = AnswerEntityConstant.COL_QUESTION_ID, nullable = false)
-  private Integer questionId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = AnswerEntityConstant.COL_QUESTION_ID, nullable = false)
+  private QuestionEntity question;
 
-  @Column(name = AnswerEntityConstant.COL_SELECTED_OPTION_ID)
-  private Integer selectedOptionId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = AnswerEntityConstant.COL_SELECTED_OPTION_ID)
+  private QuestionOptionEntity selectedOption;
 
   @Column(name = AnswerEntityConstant.COL_IS_CORRECT)
   private Boolean isCorrect;

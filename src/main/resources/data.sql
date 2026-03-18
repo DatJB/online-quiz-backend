@@ -5,7 +5,7 @@ INSERT INTO users (id, username, email, password, role) VALUES
 (3, 'student2', 'student2@gmail.com', '123456', 'student');
 
 -- STUDENTS
-INSERT INTO students (user_id, student_code, class, phone) VALUES
+INSERT INTO students (user_id, student_code, class_name, phone) VALUES
 (2, 'SV001', 'CNTT1', '0123456789'),
 (3, 'SV002', 'CNTT2', '0987654321');
 

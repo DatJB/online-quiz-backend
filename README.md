@@ -41,8 +41,8 @@ src/main/resources/
 ✔ Spring Boot sẽ tự:
 
 * chạy `schema.sql` → tạo bảng
-* chạy `data.sql` → insert dữ liệu mẫu
-
+* chạy `data.sql` → insert dữ liệu mẫu <br>
+  (có thể tự insert thủ công vào)
 ---
 
 ## 3. Cấu trúc thư mục project

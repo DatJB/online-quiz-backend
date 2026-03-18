@@ -2,14 +2,8 @@ package com.group.backend.entity;
 
 import com.group.backend.constant.entity.AttemptEntityConstant;
 import com.group.backend.entity.enums.AttemptStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,11 +25,13 @@ public class AttemptEntity {
   @Column(name = AttemptEntityConstant.COL_ID)
   private Integer id;
 
-  @Column(name = AttemptEntityConstant.COL_USER_ID, nullable = false)
-  private Integer userId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = AttemptEntityConstant.COL_USER_ID, nullable = false)
+  private UserEntity user;
 
-  @Column(name = AttemptEntityConstant.COL_EXAM_ID, nullable = false)
-  private Integer examId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = AttemptEntityConstant.COL_EXAM_ID, nullable = false)
+  private ExamEntity exam;
 
   @Column(name = AttemptEntityConstant.COL_START_TIME)
   private LocalDateTime startTime;
