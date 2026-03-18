@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = QuestionEntityConstant.TABLE_NAME)
 @Getter
@@ -32,4 +34,7 @@ public class Question
 
   @Column(name = QuestionEntityConstant.COL_EXPLANATION, columnDefinition = "TEXT")
   private String explanation;
+
+  @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+  private List<Option> options;
 }
