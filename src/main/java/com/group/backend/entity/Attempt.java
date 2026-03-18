@@ -18,7 +18,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AttemptEntity {
+public class Attempt
+{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,11 +28,11 @@ public class AttemptEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = AttemptEntityConstant.COL_USER_ID, nullable = false)
-  private UserEntity user;
+  private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = AttemptEntityConstant.COL_EXAM_ID, nullable = false)
-  private ExamEntity exam;
+  private Exam exam;
 
   @Column(name = AttemptEntityConstant.COL_START_TIME)
   private LocalDateTime startTime;

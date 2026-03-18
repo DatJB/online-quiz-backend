@@ -15,7 +15,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QuestionOptionEntity {
+public class Option
+{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +25,7 @@ public class QuestionOptionEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = QuestionOptionEntityConstant.COL_QUESTION_ID, nullable = false)
-  private QuestionEntity question;
+  private Question question;
 
   @Column(name = QuestionOptionEntityConstant.COL_CONTENT, columnDefinition = "TEXT", nullable = false)
   private String content;

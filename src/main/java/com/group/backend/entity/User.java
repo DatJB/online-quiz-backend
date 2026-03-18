@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserEntity extends BaseJpaAuditingEntity
+public class User extends BaseJpaAuditing
 {
 
   @Id
@@ -36,11 +36,11 @@ public class UserEntity extends BaseJpaAuditingEntity
   private Role role;
 
   @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-  private StudentEntity student;
+  private Student student;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-  private List<AttemptEntity> attempts;
+  private List<Attempt> attempts;
 
   @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
-  private List<ExamEntity> createdExams;
+  private List<Exam> createdExams;
 }

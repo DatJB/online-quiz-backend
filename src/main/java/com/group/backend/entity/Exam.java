@@ -18,7 +18,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ExamEntity extends BaseJpaAuditingEntity {
+public class Exam extends BaseJpaAuditing
+{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,5 +47,5 @@ public class ExamEntity extends BaseJpaAuditingEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = ExamEntityConstant.COL_CREATED_BY)
-  private UserEntity createdBy;
+  private User createdBy;
 }

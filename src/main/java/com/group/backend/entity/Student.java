@@ -15,7 +15,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StudentEntity {
+public class Student
+{
 
   @Id
   @Column(name = StudentEntityConstant.COL_USER_ID)
@@ -24,7 +25,7 @@ public class StudentEntity {
   @OneToOne
   @MapsId
   @JoinColumn(name = StudentEntityConstant.COL_USER_ID)
-  private UserEntity user;
+  private User user;
 
   @Column(name = StudentEntityConstant.COL_STUDENT_CODE, unique = true, nullable = false, length = StudentEntityConstant.STUDENT_CODE_MAX_LENGTH)
   private String studentCode;

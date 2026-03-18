@@ -15,7 +15,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AnswerEntity {
+public class Answer
+{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,15 +25,15 @@ public class AnswerEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = AnswerEntityConstant.COL_ATTEMPT_ID, nullable = false)
-  private AttemptEntity attempt;
+  private Attempt attempt;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = AnswerEntityConstant.COL_QUESTION_ID, nullable = false)
-  private QuestionEntity question;
+  private Question question;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = AnswerEntityConstant.COL_SELECTED_OPTION_ID)
-  private QuestionOptionEntity selectedOption;
+  private Option selectedOption;
 
   @Column(name = AnswerEntityConstant.COL_IS_CORRECT)
   private Boolean isCorrect;
