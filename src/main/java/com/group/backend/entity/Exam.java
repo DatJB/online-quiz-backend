@@ -5,6 +5,8 @@ import com.group.backend.entity.enums.ExamType;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,4 +50,10 @@ public class Exam extends BaseJpaAuditing
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = ExamEntityConstant.COL_CREATED_BY)
   private User createdBy;
+
+  @OneToMany(mappedBy = "exam", fetch = FetchType.LAZY)
+  private List<Question> questions;
+
+  @OneToMany(mappedBy = "exam", fetch = FetchType.LAZY)
+  private List<Attempt> attempts;
 }

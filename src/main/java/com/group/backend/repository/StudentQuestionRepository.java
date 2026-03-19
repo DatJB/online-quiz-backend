@@ -13,4 +13,6 @@ public interface StudentQuestionRepository extends JpaRepository<Question, Integ
 {
     @Query("SELECT q FROM Question q LEFT JOIN FETCH q.options WHERE q.exam.id = :examId")
     List<Question> findByExamId(Integer examId);
+
+    Integer countByExamId(Integer examId);
 }

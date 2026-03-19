@@ -5,6 +5,8 @@ import com.group.backend.entity.enums.AttemptStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -52,4 +54,7 @@ public class Attempt
   @Enumerated(EnumType.STRING)
   @Column(name = AttemptEntityConstant.COL_STATUS, nullable = false)
   private AttemptStatus status;
+
+  @OneToMany(mappedBy = "attempt", fetch = FetchType.LAZY)
+  private List<Answer> answers;
 }
