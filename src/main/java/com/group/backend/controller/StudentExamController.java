@@ -40,7 +40,7 @@ public class StudentExamController
     @PostMapping("/{examId}/start")
     public ResponseEntity<StartAttemptDTO> startAttempt(@PathVariable Integer examId)
     {
-        StartAttemptDTO attempt = studentExamService.startAttempt(examId, 1);
+        StartAttemptDTO attempt = studentExamService.startAttempt(examId, 2);
         return ResponseEntity.status(HttpStatus.CREATED).body(attempt);
     }
 
@@ -50,7 +50,7 @@ public class StudentExamController
             @PathVariable Integer examId,
             @RequestBody SubmitAttemptRequestDTO request
     ) {
-        ExamResultDTO result = studentExamService.submitAttempt(examId, request, 1);
+        ExamResultDTO result = studentExamService.submitAttempt(examId, request, 2);
         return ResponseEntity.ok(result);
     }
 }
