@@ -13,9 +13,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public class BaseJpaAuditingEntity {
+public class BaseJpaAuditing
+{
 
-  @CreatedDate
-  @Column(updatable = false)
-  private LocalDateTime createdAt;
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 }
