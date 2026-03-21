@@ -1,5 +1,6 @@
 package com.group.backend.service.student;
 
+import com.group.backend.dto.MyAttemptDTO;
 import com.group.backend.dto.PasswordUpdateRequest;
 import com.group.backend.dto.StudentProfileResponse;
 import com.group.backend.entity.Attempt;
@@ -9,7 +10,7 @@ public interface StudentService {
 
   StudentProfileResponse getMyProfile();
 
-  List<Attempt> getMyResults();
+  List<MyAttemptDTO> getMyResults();
 
   void changePassword(PasswordUpdateRequest request);
 }

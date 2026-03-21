@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AttemptRepository extends JpaRepository<Attempt, Integer> {
 
-  List<Attempt> findAllByUserIdOrderByStartTimeDesc(Integer userId);
+  List<Attempt> findAllByUser_IdOrderByStartTimeDesc(Integer userId);
 }

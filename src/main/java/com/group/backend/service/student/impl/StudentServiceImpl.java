@@ -1,5 +1,6 @@
 package com.group.backend.service.student.impl;
 
+import com.group.backend.dto.MyAttemptDTO;
 import com.group.backend.dto.PasswordUpdateRequest;
 import com.group.backend.dto.StudentProfileResponse;
 import com.group.backend.entity.Attempt;
@@ -14,6 +15,8 @@ import com.group.backend.security.CustomUserDetails;
 import com.group.backend.service.student.StudentService;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,8 +53,20 @@ public class StudentServiceImpl implements StudentService {
   }
 
   @Override
-  public List<Attempt> getMyResults() {
-    return attemptRepository.findAllByUserIdOrderByStartTimeDesc(getCurrentUser().getId());
+  public List<MyAttemptDTO> getMyResults() {
+    return attemptRepository.findAllByUser_IdOrderByStartTimeDesc(getCurrentUser().getId())
+            .stream()
+            .map(a -> MyAttemptDTO.builder()
+                    .attemptId(a.getId())
+                    .examTitle(a.getExam().getTitle())
+                    .score(a.getScore())
+                    .totalQuestions(a.getTotalQuestions())
+                    .correctAnswers(a.getCorrectAnswers())
+                    .status(a.getStatus().name())
+                    .startTime(a.getStartTime())
+                    .endTime(a.getEndTime())
+                    .build())
+            .collect(Collectors.toList());
   }
 
   @Override

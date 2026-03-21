@@ -1,6 +1,7 @@
 package com.group.backend.controller;
 
 import com.group.backend.constant.common.ApiMessageConstant;
+import com.group.backend.dto.MyAttemptDTO;
 import com.group.backend.dto.PasswordUpdateRequest;
 import com.group.backend.dto.ResponseGeneral;
 import com.group.backend.dto.StudentProfileResponse;
@@ -32,7 +33,7 @@ public class StudentController {
   }
 
   @GetMapping("/results")
-  public ResponseEntity<ResponseGeneral<List<Attempt>>> getResults() {
+  public ResponseEntity<ResponseGeneral<List<MyAttemptDTO>>> getResults() {
     return ResponseEntity.ok(ResponseGeneral.ofSuccess(
         ApiMessageConstant.SUCCESS_GET_RESULT,
         studentService.getMyResults()
