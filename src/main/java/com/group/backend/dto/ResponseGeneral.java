@@ -18,7 +18,6 @@ public class ResponseGeneral<T> {
   private T data;
   private String timestamp;
 
-
   public static <T> ResponseGeneral<T> of(int status, String message, T data) {
     return of(status, message, data, LocalDateTime.now().toString());
   }
