@@ -1,19 +1,18 @@
-package com.group.backend.service.impl;
+package com.group.backend.service.admin.impl;
 
 import com.group.backend.dto.AdminDashboardDTO;
 import com.group.backend.dto.RecentActivityDTO;
 import com.group.backend.entity.enums.Role;
-import com.group.backend.repository.StudentAttemptRepository;
-import com.group.backend.repository.StudentExamRepository;
+import com.group.backend.repository.student.StudentAttemptRepository;
+import com.group.backend.repository.student.StudentExamRepository;
 import com.group.backend.repository.UserRepository;
-import com.group.backend.service.AdminDashboardService;
+import com.group.backend.service.admin.AdminDashboardService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

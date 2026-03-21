@@ -1,14 +1,17 @@
-package com.group.backend.service.impl;
+package com.group.backend.service.student.impl;
 
 import com.group.backend.dto.*;
 import com.group.backend.entity.*;
 import com.group.backend.entity.enums.AttemptStatus;
 import com.group.backend.entity.enums.ExamType;
-import com.group.backend.repository.*;
-import com.group.backend.service.StudentExamService;
+import com.group.backend.exception.business.AttemptNotFoundException;
+import com.group.backend.exception.business.ExamNotAvailableException;
+import com.group.backend.exception.business.ExamNotFoundException;
+import com.group.backend.exception.business.OptionNotFoundException;
+import com.group.backend.repository.student.*;
+import com.group.backend.service.student.StudentExamService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
@@ -25,16 +28,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StudentExamServiceImpl implements StudentExamService
 {
-    @Autowired
-    private StudentExamRepository studentExamRepository;
-    @Autowired
-    private StudentQuestionRepository studentQuestionRepository;
-    @Autowired
-    private StudentAttemptRepository studentAttemptRepository;
-    @Autowired
-    private StudentAnswerRepository studentAnswerRepository;
-    @Autowired
-    private StudentOptionRepository studentOptionRepository;
+    private final StudentExamRepository studentExamRepository;
+    private final StudentQuestionRepository studentQuestionRepository;
+    private final StudentAttemptRepository studentAttemptRepository;
+    private final StudentAnswerRepository studentAnswerRepository;
+    private final StudentOptionRepository studentOptionRepository;
 
     @Override
     public Page<ExamDTO> getAllExams(int page, int size, String sortBy)
@@ -48,7 +46,7 @@ public class StudentExamServiceImpl implements StudentExamService
     {
         if (!studentExamRepository.existsById(examId))
         {
-            throw new RuntimeException("Exam not found");
+            throw new ExamNotFoundException();
         }
 
         return studentQuestionRepository.findByExamId(examId).stream()
@@ -67,7 +65,7 @@ public class StudentExamServiceImpl implements StudentExamService
             LocalDateTime now = LocalDateTime.now();
             if (now.isBefore(exam.getStartTime()) || now.isAfter(exam.getEndTime()))
             {
-                throw new RuntimeException("Exam not available");
+                throw new ExamNotAvailableException();
             }
         }
 
@@ -95,7 +93,7 @@ public class StudentExamServiceImpl implements StudentExamService
     {
         System.out.println(examId + " " + userId);
         Attempt attempt = studentAttemptRepository.findByExamIdAndUserIdAndStatus(examId, userId, AttemptStatus.IN_PROGRESS)
-                .orElseThrow(() -> new RuntimeException("Attempt not found"));
+                .orElseThrow(AttemptNotFoundException::new);
 
         // Check timeout
         LocalDateTime now = LocalDateTime.now();
@@ -115,7 +113,7 @@ public class StudentExamServiceImpl implements StudentExamService
             if (answerRequest.getSelectedOptionId() != null)
             {
                 Option option = studentOptionRepository.findById(answerRequest.getSelectedOptionId())
-                        .orElseThrow(() -> new RuntimeException("Option not found"));
+                        .orElseThrow(OptionNotFoundException::new);
                 isCorrect = option.getIsCorrect();
             }
 

@@ -1,4 +1,4 @@
-package com.group.backend.service;
+package com.group.backend.service.student;
 
 import com.group.backend.dto.*;
 import org.springframework.data.domain.Page;

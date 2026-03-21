@@ -9,6 +9,7 @@ public class ExceptionConstant {
   public static final String TITLE_DATABASE_ERROR = "Database Error";
   public static final String TITLE_INTERNAL_SERVER_ERROR = "Internal Server Error";
   public static final String TITLE_NOT_FOUND = "Resource Not Found";
+  public static final String TITLE_FORBIDDEN = "Access Denied";
 
   public static final String GROUP_CODE_BUSINESS = "BUSINESS_ERROR_GROUP";
   public static final String GROUP_CODE_DATABASE = "DB_SYS_ERROR_GROUP";

@@ -1,7 +1,7 @@
 package com.group.backend.controller;
 
 import com.group.backend.dto.*;
-import com.group.backend.service.StudentExamService;
+import com.group.backend.service.student.StudentExamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,8 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentExamController
 {
-    @Autowired
-    private StudentExamService studentExamService;
+    private final StudentExamService studentExamService;
 
     @GetMapping
     public ResponseEntity<Page<ExamDTO>> getAllExams(

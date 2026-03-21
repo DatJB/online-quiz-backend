@@ -1,7 +1,7 @@
 package com.group.backend.controller;
 
 import com.group.backend.dto.AdminDashboardDTO;
-import com.group.backend.service.AdminDashboardService;
+import com.group.backend.service.admin.AdminDashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

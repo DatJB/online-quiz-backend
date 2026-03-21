@@ -1,6 +1,5 @@
-package com.group.backend.repository;
+package com.group.backend.repository.student;
 
-import com.group.backend.dto.RecentActivityDTO;
 import com.group.backend.entity.Attempt;
 import com.group.backend.entity.enums.AttemptStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
