@@ -1,0 +1,5 @@
+$kind: http-request
+name: GetStudents
+url: ""
+method: GET
+order: null

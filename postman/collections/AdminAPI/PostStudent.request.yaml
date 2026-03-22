@@ -1,0 +1,5 @@
+$kind: http-request
+name: PostStudent
+url: ""
+method: GET
+order: 550651927986175

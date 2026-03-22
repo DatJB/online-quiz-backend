@@ -1,0 +1,5 @@
+$kind: http-request
+name: DeleteStudentById
+url: ""
+method: GET
+order: 2038731328454655

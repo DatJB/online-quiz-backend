@@ -1,0 +1,5 @@
+$kind: http-request
+name: GetStudentById
+url: ""
+method: GET
+order: 3914252733644799

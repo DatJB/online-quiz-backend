@@ -1,0 +1,5 @@
+$kind: http-request
+name: GetStudentResults
+url: ""
+method: GET
+order: 3596690636406783

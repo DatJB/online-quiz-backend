@@ -1,0 +1,5 @@
+$kind: http-request
+name: GetAttempById
+url: ""
+method: GET
+order: 3900285943545855

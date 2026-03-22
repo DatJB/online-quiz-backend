@@ -1,0 +1,5 @@
+$kind: http-request
+name: PutStudentById
+url: ""
+method: GET
+order: 4122565979144191

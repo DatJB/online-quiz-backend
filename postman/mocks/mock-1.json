@@ -1,0 +1,13 @@
+{
+  "id": "1dc01186-8183-4e98-ac8a-0d3ababddc9a",
+  "version": 1,
+  "name": "New Mock",
+  "protocol": "http",
+  "port": 4500,
+  "mockSrc": "./mock-1.js",
+  "autoRestartOnChange": true,
+  "logging": {
+    "level": "verbose",
+    "showBody": true
+  }
+}
