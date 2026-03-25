@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/admin/exams")
@@ -118,12 +119,54 @@ public class AdminExamController {
     @PostMapping("/{examId}/questions/import")
     public ResponseEntity<ResponseGeneral<Void>> importQuestions(
             @PathVariable int examId,
-            @Valid @RequestBody AdminQuestionImportRequest request
+            @RequestParam("file") MultipartFile file
     ) {
-        adminExamService.importQuestions(examId, request);
+        adminExamService.importQuestions(examId, file);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 ResponseGeneral.ofSuccess("Import questions successfully", null)
+        );
+    }
+
+    //GET /admin/exams/{examId}/questions
+    @GetMapping("/{examId}/questions")
+    public ResponseEntity<ResponseGeneral<List<AdminQuestionResponse>>> getExamQuestions(
+            @PathVariable int examId
+    ) {
+        return ResponseEntity.ok(
+                ResponseGeneral.ofSuccess(
+                        "Get exam questions successfully",
+                        adminExamService.getExamQuestions(examId)
+                )
+        );
+    }
+
+    //PUT /admin/exams/{examId}/questions/{questionId}
+    @PutMapping("/{examId}/questions/{questionId}")
+    public ResponseEntity<ResponseGeneral<Void>> editQuestion(
+            @PathVariable int examId,
+            @PathVariable int questionId,
+            @RequestBody AdminQuestionRequest request
+    ) {
+        adminExamService.editQuestion(examId, questionId, request);
+
+        return ResponseEntity.ok(
+                ResponseGeneral.ofSuccess("Update question successfully", null)
+        );
+    }
+
+    //PUT /admin/exams/{examId}/questions/{questionId}/options/{optionId}
+    @PutMapping("/{examId}/questions/{questionId}/options/{optionId}")
+    public ResponseEntity<ResponseGeneral<Void>> editOption(
+            @PathVariable int examId,
+            @PathVariable int questionId,
+            @PathVariable int optionId,
+            @RequestBody AdminOptionRequest request
+    ) {
+        adminExamService.editOption(examId, questionId, optionId, request);
+
+        return ResponseEntity.ok(
+                ResponseGeneral.ofSuccess("Update option successfully", null)
         );
     }
 }

@@ -1,21 +1,23 @@
 package com.group.backend.service.admin.impl;
 
 import java.util.*;
-import com.group.backend.dto.AdminExamRequest;
-import com.group.backend.dto.AdminExamResponse;
+
+import com.group.backend.dto.*;
 import com.group.backend.entity.Exam;
 import com.group.backend.exception.base.BusinessException;
 import com.group.backend.exception.business.BadRequestException;
+import com.group.backend.repository.admin.OptionRepository;
 import com.group.backend.repository.admin.QuestionRepository;
 import com.group.backend.service.admin.AdminExamService;
 import com.group.backend.repository.admin.AdminExamRepository;
 import com.group.backend.exception.business.ResourceNotFoundException;
-import com.group.backend.dto.AdminQuestionRequest;
-import com.group.backend.dto.AdminQuestionImportRequest;
 import com.group.backend.entity.Option;
 import com.group.backend.entity.Question;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 @Service
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 public class AdminExamServiceImpl implements AdminExamService {
     private final AdminExamRepository adminExamRepository;
     private final QuestionRepository questionRepository;
+    private final OptionRepository optionRepository;
 
     @Override
     public List<AdminExamResponse> getAllExams()
@@ -149,6 +152,26 @@ public class AdminExamServiceImpl implements AdminExamService {
     }
 
     @Override
+    public void editQuestion(int examId, int questionId, AdminQuestionRequest request) {
+
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Question not found"));
+
+        if (!question.getExam().getId().equals(examId)) {
+            throw new BadRequestException("Question does not belong to this exam");
+        }
+
+        if (request.getContent() == null || request.getContent().isBlank()) {
+            throw new BadRequestException("Question content must not be blank");
+        }
+
+        question.setContent(request.getContent());
+        question.setExplanation(request.getExplanation());
+
+        questionRepository.save(question);
+    }
+
+    @Override
     public void deleteQuestion(int examId, int questionId) {
 
         Exam exam = adminExamRepository.findById(examId)
@@ -165,48 +188,100 @@ public class AdminExamServiceImpl implements AdminExamService {
     }
 
     @Override
-    public void importQuestions(int examId, AdminQuestionImportRequest request) {
+    public void importQuestions(int examId, MultipartFile file) {
 
         Exam exam = adminExamRepository.findById(examId)
                 .orElseThrow(() -> new ResourceNotFoundException("Exam not found"));
 
-        if (request.getQuestions() == null || request.getQuestions().isEmpty()) {
-            throw new BadRequestException("Questions list must not be empty");
+        try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+            List<Question> questions = new ArrayList<>();
+
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row == null) continue;
+
+                Question question = new Question();
+                question.setExam(exam);
+                question.setContent(row.getCell(0).toString());
+                question.setExplanation(row.getCell(1).toString());
+
+                List<Option> options = new ArrayList<>();
+
+                String correct = row.getCell(6).toString();
+
+                if (!List.of("A","B","C","D").contains(correct.toUpperCase())) {
+                    throw new BadRequestException("Invalid correct answer at row " + i);
+                }
+                options.add(createOption(question, row.getCell(2).toString(), "A".equalsIgnoreCase(correct)));
+                options.add(createOption(question, row.getCell(3).toString(), "B".equalsIgnoreCase(correct)));
+                options.add(createOption(question, row.getCell(4).toString(), "C".equalsIgnoreCase(correct)));
+                options.add(createOption(question, row.getCell(5).toString(), "D".equalsIgnoreCase(correct)));
+
+                question.setOptions(options);
+                questions.add(question);
+            }
+
+            questionRepository.saveAll(questions);
+
+        } catch (Exception e) {
+            throw new BadRequestException("Invalid Excel file");
+        }
+    }
+    private Option createOption(Question question, String content, boolean isCorrect) {
+        Option option = new Option();
+        option.setContent(content);
+        option.setIsCorrect(isCorrect);
+        option.setQuestion(question);
+        return option;
+    }
+    @Override
+    public List<AdminQuestionResponse> getExamQuestions(int examId) {
+
+        List<Question> questions = questionRepository.findByExamId(examId);
+
+        if (questions.isEmpty() && !adminExamRepository.existsById(examId)) {
+            throw new ResourceNotFoundException("Exam not found");
         }
 
-        List<Question> questions = request.getQuestions().stream().map(qReq -> {
+        return questions.stream()
+                .map(AdminQuestionResponse::fromEntity)
+                .toList();
+    }
 
-            if (qReq.getOptions() == null || qReq.getOptions().isEmpty()) {
-                throw new BadRequestException("Options must not be empty");
+    @Override
+    public void editOption(int examId, int questionId, int optionId, AdminOptionRequest request) {
+
+        Option option = optionRepository.findById(optionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Option not found"));
+
+        if (!option.getQuestion().getId().equals(questionId) ||
+                !option.getQuestion().getExam().getId().equals(examId)) {
+            throw new BadRequestException("Option does not belong to this question/exam");
+        }
+
+        if (request.getContent() == null || request.getContent().isBlank()) {
+            throw new BadRequestException("Option content must not be blank");
+        }
+
+        option.setContent(request.getContent());
+
+        if (Boolean.TRUE.equals(request.getIsCorrect())) {
+
+            List<Option> options = optionRepository.findByQuestionId(questionId);
+            for (Option opt : options) {
+                opt.setIsCorrect(false);
             }
 
-            boolean hasCorrect = qReq.getOptions()
-                    .stream()
-                    .anyMatch(opt -> opt.getIsCorrect());
+            optionRepository.saveAll(options);
 
-            if (!hasCorrect) {
-                throw new BadRequestException("At least one correct answer is required");
-            }
+            option.setIsCorrect(true);
 
-            Question question = new Question();
-            question.setExam(exam);
-            question.setContent(qReq.getContent());
-            question.setExplanation(qReq.getExplanation());
+        } else {
+            option.setIsCorrect(false);
+        }
 
-            List<Option> options = qReq.getOptions().stream().map(optReq -> {
-                Option option = new Option();
-                option.setContent(optReq.getContent());
-                option.setIsCorrect(optReq.getIsCorrect());
-                option.setQuestion(question);
-                return option;
-            }).toList();
-
-            question.setOptions(options);
-
-            return question;
-
-        }).toList();
-
-        questionRepository.saveAll(questions);
+        optionRepository.save(option);
     }
 }
