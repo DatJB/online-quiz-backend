@@ -3,11 +3,9 @@ package com.group.backend.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @Builder
-public class QuestionResultDTO
+public class AdminQuestionResultDTO
 {
     private int answerId;
     private String questionContent;

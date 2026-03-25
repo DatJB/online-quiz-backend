@@ -35,7 +35,7 @@ public class AttemptServiceImpl implements AttemptService
     {
         List<Answer> answers = answerRepository.findByAttemptIdWithDetails(attemptId);
 
-        List<QuestionResultDTO> results = answers.stream()
+        List<AdminQuestionResultDTO> results = answers.stream()
                 .map(this::toQuestionResultDTO)
                 .toList();
 
@@ -92,7 +92,7 @@ public class AttemptServiceImpl implements AttemptService
                 .build();
     }
 
-    private QuestionResultDTO toQuestionResultDTO(Answer answer)
+    private AdminQuestionResultDTO toQuestionResultDTO(Answer answer)
     {
         Question question = answer.getQuestion();
 
@@ -101,7 +101,7 @@ public class AttemptServiceImpl implements AttemptService
                 .findFirst()
                 .orElse(null);
 
-        return QuestionResultDTO.builder()
+        return AdminQuestionResultDTO.builder()
                 .answerId(answer.getId())
                 .questionContent(question.getContent())
                 .questionExplanation(question.getExplanation())

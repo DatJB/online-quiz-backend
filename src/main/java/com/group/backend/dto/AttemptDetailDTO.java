@@ -10,5 +10,5 @@ import java.util.List;
 public class AttemptDetailDTO
 {
     private Integer attemptId;
-    private List<QuestionResultDTO> questionResults;
+    private List<AdminQuestionResultDTO> questionResults;
 }
