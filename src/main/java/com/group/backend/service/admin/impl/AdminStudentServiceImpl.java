@@ -6,24 +6,26 @@ import com.group.backend.dto.UpdateStudentRequest;
 import com.group.backend.entity.Student;
 import com.group.backend.entity.User;
 import com.group.backend.entity.enums.Role;
-import com.group.backend.repository.admin.AttemptRepository;
+import com.group.backend.repository.UserRepository;
 import com.group.backend.repository.admin.StudentRepository;
-import com.group.backend.repository.admin.UserRepository;
-import com.group.backend.service.admin.StudentService;
+import com.group.backend.repository.attempt.AttemptRepository;
+import com.group.backend.service.admin.AdminStudentService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class StudentServiceImpl implements StudentService
+public class AdminStudentServiceImpl implements AdminStudentService
 {
     private final StudentRepository studentRepository;
     private final UserRepository userRepository;
     private final AttemptRepository attemptRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Page<StudentDTO> getAllStudents(int pageNumber, int pageSize, String keyword)
@@ -59,7 +61,7 @@ public class StudentServiceImpl implements StudentService
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.STUDENT)
                 .build();
 

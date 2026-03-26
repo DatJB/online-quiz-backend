@@ -62,7 +62,7 @@ public class StudentServiceImpl implements StudentService {
                     .score(a.getScore())
                     .totalQuestions(a.getTotalQuestions())
                     .correctAnswers(a.getCorrectAnswers())
-                    .status(a.getStatus().name())
+                    .status(String.valueOf(a.getStatus()))
                     .startTime(a.getStartTime())
                     .endTime(a.getEndTime())
                     .build())

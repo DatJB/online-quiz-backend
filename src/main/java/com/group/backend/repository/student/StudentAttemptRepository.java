@@ -29,7 +29,7 @@ public interface StudentAttemptRepository extends JpaRepository<Attempt, Integer
         SELECT a FROM Attempt a
         JOIN FETCH a.user
         JOIN FETCH a.exam
-        WHERE a.status <> com.group.backend.entity.enums.AttemptStatus.IN_PROGRESS
+        WHERE a.status <> 'IN_PROGRESS'
         ORDER BY a.endTime DESC
         LIMIT 10
         """)

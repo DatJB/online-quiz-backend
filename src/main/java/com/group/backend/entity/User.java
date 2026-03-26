@@ -22,7 +22,7 @@ public class User extends BaseJpaAuditing
   @Column(name = UserEntityConstant.COL_ID)
   private Integer id;
 
-  @Column(name = UserEntityConstant.COL_USERNAME, unique = true, nullable = false, length = UserEntityConstant.USERNAME_MAX_LENGTH)
+  @Column(name = UserEntityConstant.COL_USERNAME, nullable = false, length = UserEntityConstant.USERNAME_MAX_LENGTH)
   private String username;
 
   @Column(name = UserEntityConstant.COL_EMAIL, unique = true, nullable = false, length = UserEntityConstant.EMAIL_MAX_LENGTH)

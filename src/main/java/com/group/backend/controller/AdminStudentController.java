@@ -2,7 +2,7 @@ package com.group.backend.controller;
 
 import com.group.backend.dto.*;
 import com.group.backend.service.admin.AttemptService;
-import com.group.backend.service.admin.StudentService;
+import com.group.backend.service.admin.AdminStudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminStudentController
 {
-    private final StudentService studentService;
+    private final AdminStudentService adminStudentService;
     private final AttemptService attemptService;
 
     @GetMapping
@@ -27,7 +27,7 @@ public class AdminStudentController
             @RequestParam(required = false) String keyword
     ) {
         return ResponseEntity.ok(
-                studentService.getAllStudents(pageNumber, pageSize, keyword)
+                adminStudentService.getAllStudents(pageNumber, pageSize, keyword)
         );
     }
 
@@ -36,7 +36,7 @@ public class AdminStudentController
             @PathVariable Integer studentId
     ) {
         return ResponseEntity.ok(
-                studentService.getStudentById(studentId)
+                adminStudentService.getStudentById(studentId)
         );
     }
 
@@ -45,7 +45,7 @@ public class AdminStudentController
             @RequestBody CreateStudentRequest request
     ) {
         return ResponseEntity.ok(
-                studentService.createStudent(request)
+                adminStudentService.createStudent(request)
         );
     }
 
@@ -55,7 +55,7 @@ public class AdminStudentController
             @RequestBody UpdateStudentRequest request
     ) {
         return ResponseEntity.ok(
-                studentService.updateStudent(studentId, request)
+                adminStudentService.updateStudent(studentId, request)
         );
     }
 
@@ -63,7 +63,7 @@ public class AdminStudentController
     public ResponseEntity<StudentDTO> deleteStudent(
             @PathVariable Integer studentId
     ) {
-        studentService.deleteStudent(studentId);
+        adminStudentService.deleteStudent(studentId);
 
         return ResponseEntity.noContent().build();
     }

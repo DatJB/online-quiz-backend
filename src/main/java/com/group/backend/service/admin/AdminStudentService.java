@@ -5,7 +5,7 @@ import com.group.backend.dto.StudentDTO;
 import com.group.backend.dto.UpdateStudentRequest;
 import org.springframework.data.domain.Page;
 
-public interface StudentService
+public interface AdminStudentService
 {
     Page<StudentDTO> getAllStudents(int pageNumber, int pageSize, String keyword);
 

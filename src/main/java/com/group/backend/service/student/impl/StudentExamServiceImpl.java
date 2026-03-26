@@ -83,7 +83,7 @@ public class StudentExamServiceImpl implements StudentExamService
                 .id(saved.getId())
                 .examId(examId)
                 .startTime(saved.getStartTime())
-                .status(saved.getStatus().name())
+                .status(String.valueOf(saved.getStatus()))
                 .build();
     }
 
@@ -91,7 +91,7 @@ public class StudentExamServiceImpl implements StudentExamService
     @Transactional
     public ExamResultDTO submitAttempt(Integer examId, SubmitAttemptRequestDTO request, Integer userId)
     {
-        System.out.println(examId + " " + userId);
+        System.out.println(examId + " " + userId + " " + AttemptStatus.IN_PROGRESS);
         Attempt attempt = studentAttemptRepository.findByExamIdAndUserIdAndStatus(examId, userId, AttemptStatus.IN_PROGRESS)
                 .orElseThrow(AttemptNotFoundException::new);
 
@@ -166,7 +166,7 @@ public class StudentExamServiceImpl implements StudentExamService
                 .score(score)
                 .totalQuestions(totalQuestions)
                 .correctAnswers(correctCount)
-                .status(finalStatus.name())
+                .status(String.valueOf(finalStatus))
                 .startTime(attempt.getStartTime())
                 .endTime(now)
                 .duration(duration)
