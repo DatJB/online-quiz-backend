@@ -55,6 +55,17 @@ public class StudentExamController
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/{examId}/results")
+    public ResponseEntity<ResponseGeneral<ExamResultDTO>> getExamResult(@PathVariable Integer examId) {
+        Integer userId = getCurrentUserId();
+        return ResponseEntity.ok(
+                ResponseGeneral.ofSuccess(
+                        "Get result successfully",
+                        studentExamService.getExamResult(examId, userId)
+                )
+        );
+    }
+
     // Get UserID from JWT
     private Integer getCurrentUserId() {
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext()

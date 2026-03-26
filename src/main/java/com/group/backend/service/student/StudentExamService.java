@@ -16,4 +16,6 @@ public interface StudentExamService
     StartAttemptDTO startAttempt(Integer examId, Integer userId);
 
     ExamResultDTO submitAttempt(Integer examId, SubmitAttemptRequestDTO request, Integer userId);
+
+    ExamResultDTO getExamResult(Integer examId, Integer userId);
 }

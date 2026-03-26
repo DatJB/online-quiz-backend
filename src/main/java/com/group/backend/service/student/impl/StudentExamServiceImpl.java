@@ -174,6 +174,55 @@ public class StudentExamServiceImpl implements StudentExamService
                 .build();
     }
 
+    @Override
+    public ExamResultDTO getExamResult(Integer examId, Integer userId) {
+
+        Attempt attempt = studentAttemptRepository
+                .findTopByExamIdAndUserIdOrderByEndTimeDesc(examId, userId)
+                .orElseThrow(AttemptNotFoundException::new);
+
+        long duration = ChronoUnit.MINUTES.between(attempt.getStartTime(), attempt.getEndTime());
+
+        List<QuestionResultDTO> questionResults = attempt.getAnswers()
+                .stream()
+                .map(answer -> {
+                    Question question = answer.getQuestion();
+
+                    List<OptionResultDTO> optionResults = question.getOptions()
+                            .stream()
+                            .map(opt -> OptionResultDTO.builder()
+                                    .id(opt.getId())
+                                    .content(opt.getContent())
+                                    .isCorrect(opt.getIsCorrect())
+                                    .build())
+                            .toList();
+
+                    return QuestionResultDTO.builder()
+                            .questionId(question.getId())
+                            .content(question.getContent())
+                            .explanation(question.getExplanation())
+                            .options(optionResults)
+                            .selectedOptionId(answer.getSelectedOption() != null
+                                    ? answer.getSelectedOption().getId()
+                                    : null)
+                            .isCorrect(answer.getIsCorrect())
+                            .build();
+                })
+                .toList();
+
+        return ExamResultDTO.builder()
+                .attemptId(attempt.getId())
+                .score(attempt.getScore())
+                .totalQuestions(attempt.getTotalQuestions())
+                .correctAnswers(attempt.getCorrectAnswers())
+                .status(String.valueOf(attempt.getStatus()))
+                .startTime(attempt.getStartTime())
+                .endTime(attempt.getEndTime())
+                .duration(duration)
+                .questions(questionResults)
+                .build();
+    }
+
     private ExamDTO toDTO(Exam exam)
     {
         return ExamDTO.builder()

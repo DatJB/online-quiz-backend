@@ -51,7 +51,7 @@ public class Exam extends BaseJpaAuditing
   @JoinColumn(name = ExamEntityConstant.COL_CREATED_BY)
   private User createdBy;
 
-  @OneToMany(mappedBy = "exam", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Question> questions;
 
   @OneToMany(mappedBy = "exam", fetch = FetchType.LAZY)

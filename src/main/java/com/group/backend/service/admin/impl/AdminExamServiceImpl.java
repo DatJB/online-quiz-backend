@@ -149,6 +149,7 @@ public class AdminExamServiceImpl implements AdminExamService {
         question.setOptions(options);
 
         questionRepository.save(question);
+        optionRepository.saveAll(options);
     }
 
     @Override
@@ -189,46 +190,47 @@ public class AdminExamServiceImpl implements AdminExamService {
 
     @Override
     public void importQuestions(int examId, MultipartFile file) {
-
         Exam exam = adminExamRepository.findById(examId)
                 .orElseThrow(() -> new ResourceNotFoundException("Exam not found"));
 
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
 
             Sheet sheet = workbook.getSheetAt(0);
-            List<Question> questions = new ArrayList<>();
 
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
                 if (row == null) continue;
+
+                String correct = row.getCell(6).toString().trim();
+                if (!List.of("A", "B", "C", "D").contains(correct.toUpperCase())) {
+                    throw new BadRequestException("Invalid correct answer at row " + i);
+                }
 
                 Question question = new Question();
                 question.setExam(exam);
                 question.setContent(row.getCell(0).toString());
                 question.setExplanation(row.getCell(1).toString());
 
+                questionRepository.save(question);
+
                 List<Option> options = new ArrayList<>();
-
-                String correct = row.getCell(6).toString();
-
-                if (!List.of("A","B","C","D").contains(correct.toUpperCase())) {
-                    throw new BadRequestException("Invalid correct answer at row " + i);
-                }
                 options.add(createOption(question, row.getCell(2).toString(), "A".equalsIgnoreCase(correct)));
                 options.add(createOption(question, row.getCell(3).toString(), "B".equalsIgnoreCase(correct)));
                 options.add(createOption(question, row.getCell(4).toString(), "C".equalsIgnoreCase(correct)));
                 options.add(createOption(question, row.getCell(5).toString(), "D".equalsIgnoreCase(correct)));
 
+                optionRepository.saveAll(options);
                 question.setOptions(options);
-                questions.add(question);
             }
 
-            questionRepository.saveAll(questions);
-
+        } catch (BadRequestException e) {
+            throw e;
         } catch (Exception e) {
-            throw new BadRequestException("Invalid Excel file");
+            e.printStackTrace();
+            throw new BadRequestException("Invalid Excel file: " + e.getMessage());
         }
     }
+
     private Option createOption(Question question, String content, boolean isCorrect) {
         Option option = new Option();
         option.setContent(content);
@@ -236,6 +238,7 @@ public class AdminExamServiceImpl implements AdminExamService {
         option.setQuestion(question);
         return option;
     }
+
     @Override
     public List<AdminQuestionResponse> getExamQuestions(int examId) {
 

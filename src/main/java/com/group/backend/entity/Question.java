@@ -35,6 +35,6 @@ public class Question
   @Column(name = QuestionEntityConstant.COL_EXPLANATION, columnDefinition = "TEXT")
   private String explanation;
 
-  @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Option> options;
 }

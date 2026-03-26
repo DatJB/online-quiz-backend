@@ -34,4 +34,6 @@ public interface StudentAttemptRepository extends JpaRepository<Attempt, Integer
         LIMIT 10
         """)
     List<Attempt> findRecentAttempts();
+
+    Optional<Attempt> findTopByExamIdAndUserIdOrderByEndTimeDesc(Integer examId, Integer userId);
 }
